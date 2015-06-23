@@ -1,0 +1,95 @@
+<HTML>
+  <HEAD>
+    <TITLE>BroadNet</TITLE>
+	<HTA:APPLICATION 
+     APPLICATIONNAME="BroadNetGUI"
+     SCROLL="no"
+     SINGLEINSTANCE="yes"
+	 ICON = "resources\wifi.ico"
+>
+	<style type="text/css">
+		body {
+			background: aliceblue;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+		table {
+				position: absolute;
+				left: 5%;
+				right: 10%;
+		}
+		#start {
+			position: relative;
+			left: 30%;
+		}
+		#stop {
+			position: relative;
+			left: 10%;
+		}
+		tr {
+			padding-bottom: 20px;
+		}
+		.text {
+			text-align: right;
+			font-size: 20px;
+			font-weight: bolder;
+		}
+		.inputs {
+			position: relative;
+			left: 10%;
+		}
+		.buttons {
+			position: relative;
+			top: 5px;
+		}
+		.actbutton {
+			border-radius: 100%;
+			font-weight: bold;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+		
+	</style>
+	<script language="VBScript">
+		Sub StartNetwork
+			ssid=netname.Value
+			password=pass.Value
+			Dim shell
+			Set Shell = CreateObject ("WScript.Shell")
+			USERPROFILE = Shell.ExpandEnvironmentStrings("%UserProfile%")
+			Shell.run "cmd /c resources\sudo.cmd resources\host.cmd " & ssid & " " & password, 0, True
+			Msgbox "Hosted Network Started with SSID: " & ssid & " and Password: " & password
+		End Sub
+
+		Sub StopNetwork
+			Dim shell
+			Set Shell = CreateObject ("WScript.Shell")
+			Shell.run "cmd /c netsh wlan stop hostednetwork", 0, True
+			Msgbox "Hosted Network Stopped"
+		End Sub		
+	</script>	
+	
+	<script language="javascript" type="text/javascript">
+		window.resizeTo(600,310);
+	</script>
+	
+  </HEAD>
+  <BODY>
+	<table>
+		<tr>
+		<img src="resources\BroadnetIcon.png">
+		</tr>
+		<tr>
+		<td class='text'>SSID: </td>
+		<td class="inputs"><INPUT TYPE="text" id="netname"></td>
+		</tr>
+		<tr>
+		<td class='text'>PASSWORD: </td>
+		<td class="inputs"><INPUT TYPE="text" id="pass"></td>
+		</tr>
+		<tr>
+		<td id="start" class="buttons"><input type="button" value="Start Network" name="run_button"  onClick="StartNetwork()" class="actbutton">
+		<td id="stop" class="buttons"><input type="button" value="Stop Network" name="stop_button"  onClick="StopNetwork()" class="actbutton">
+		</tr>
+
+    </table>
+  </BODY>
+</HTML>
