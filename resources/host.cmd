@@ -10,4 +10,3 @@ IF "%3" NEQ "" (
 	timeout -t %3 /nobreak
 	netsh wlan stop hostednetwork 
 )
-exit
