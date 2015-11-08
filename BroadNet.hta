@@ -6,7 +6,7 @@
      SCROLL="no"
      SINGLEINSTANCE="yes"
 	 ICON = "resources\wifi.ico"
->
+	>
 	<style type="text/css">
 		body {
 			background: aliceblue;
@@ -19,11 +19,11 @@
 		}
 		#start {
 			position: relative;
-			left: 30%;
+			left: 130px;
 		}
 		#stop {
 			position: relative;
-			left: 10%;
+			left: 80px;
 		}
 		tr {
 			padding-bottom: 20px;
@@ -39,24 +39,23 @@
 		}
 		.buttons {
 			position: relative;
-			top: 5px;
+			top: 10px;
 		}
 		.actbutton {
-			border-radius: 100%;
 			font-weight: bold;
 			font-family: Arial, Helvetica, sans-serif;
+			background: rgba(255, 255, 255, 0.3);
 		}
-		
+		.showsave {
+			width: 80%;
+		}
 	</style>
 	<script language="VBScript">
 		Sub StartNetwork
-			ssid=netname.Value
-			password=pass.Value
 			Dim shell
 			Set Shell = CreateObject ("WScript.Shell")
-			USERPROFILE = Shell.ExpandEnvironmentStrings("%UserProfile%")
-			Shell.run "cmd /c resources\sudo.cmd resources\host.cmd " & ssid & " " & password, 0, True
-			Msgbox "Hosted Network Started with SSID: " & ssid & " and Password: " & password
+			Shell.run "cmd /c netsh wlan start hostednetwork", 0, True
+			Msgbox "Hosted Network Started"
 		End Sub
 
 		Sub StopNetwork
@@ -64,7 +63,23 @@
 			Set Shell = CreateObject ("WScript.Shell")
 			Shell.run "cmd /c netsh wlan stop hostednetwork", 0, True
 			Msgbox "Hosted Network Stopped"
-		End Sub		
+		End Sub
+	
+		Sub ShowPwd
+			pwd = pass.value
+			Msgbox pwd
+		End Sub
+		
+		Sub SaveNet
+			ssid=netname.Value
+			password=pass.Value
+			Dim shell
+			Set Shell = CreateObject ("WScript.Shell")
+			USERPROFILE = Shell.ExpandEnvironmentStrings("%UserProfile%")
+			Shell.run "cmd /c resources\sudo.cmd resources\host.cmd " & ssid & " " & password, 0, True
+			Msgbox "Network Settings Saved"
+		End Sub
+		
 	</script>	
 	
 	<script language="javascript" type="text/javascript">
@@ -80,15 +95,18 @@
 		<tr>
 		<td class='text'>SSID: </td>
 		<td class="inputs"><INPUT TYPE="text" id="netname"></td>
+		<td><input type="button" value="Save" name="savenet" onClick="SaveNet" id="savebtn" class="actbutton showsave"></td>
 		</tr>
 		<tr>
 		<td class='text'>PASSWORD: </td>
-		<td class="inputs"><INPUT TYPE="text" id="pass"></td>
+		<td class="inputs"><INPUT TYPE="password" id="pass"></td>
+		<td><input type="button" value="Show" name="showpwd" onClick="Showpwd" id="showbtn" class="actbutton showsave"></td>
 		</tr>
 		<tr>
-		<td id="start" class="buttons"><input type="button" value="Start Network" name="run_button"  onClick="StartNetwork()" class="actbutton">
-		<td id="stop" class="buttons"><input type="button" value="Stop Network" name="stop_button"  onClick="StopNetwork()" class="actbutton">
+		<td id="start" class="buttons"><input type="button" value="Start Network" name="run_button"  onClick="StartNetwork" class="actbutton">
+		<td id="stop" class="buttons"><input type="button" value="Stop Network" name="stop_button"  onClick="StopNetwork" class="actbutton">
 		</tr>
+
 
     </table>
   </BODY>
